@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import { TravelBuddyServices } from "./travelBuddy.services";
 
-const createTrip = catchAsync(async (req, res) => {
+const sendTravelBuddyRequest = catchAsync(async (req, res) => {
   const { tripId } = req.params;
   const { userId } = req.body;
   const result = await TravelBuddyServices.sendTravelBuddyRequestIntoDb(
@@ -18,6 +18,19 @@ const createTrip = catchAsync(async (req, res) => {
   });
 });
 
+const getTravelBuddies = catchAsync(async (req, res) => {
+  const { tripId } = req.params;
+  const result = await TravelBuddyServices.getTravelBuddiesFromDb(tripId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Potential travel buddies retrieved successfully",
+    data: result,
+  });
+});
+
 export const TravelBuddyController = {
-  createTrip,
+  sendTravelBuddyRequest,
+  getTravelBuddies,
 };
