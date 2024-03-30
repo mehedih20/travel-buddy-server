@@ -10,4 +10,9 @@ const userRegisterValidationSchema = z.object({
   }),
 });
 
-export { userRegisterValidationSchema };
+const userLoginValidationSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export { userRegisterValidationSchema, userLoginValidationSchema };

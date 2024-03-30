@@ -1,7 +1,8 @@
 import config from "../../config";
 import prisma from "../../utils/prisma";
-import { TUserRegister } from "./user.interface";
+import { TUserLogin, TUserRegister } from "./user.interface";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const resgisterIntoDb = async (payload: TUserRegister) => {
   const hashedPassword = await bcrypt.hash(
@@ -38,6 +39,49 @@ const resgisterIntoDb = async (payload: TUserRegister) => {
   return result;
 };
 
+const userLoginIntoDb = async (payload: TUserLogin) => {
+  let user;
+  try {
+    user = await prisma.user.findUniqueOrThrow({
+      where: {
+        email: payload.email,
+      },
+    });
+  } catch (err) {
+    throw new Error("User not found");
+  }
+
+  // password verify
+  const isPasswordVerified = await bcrypt.compare(
+    payload.password,
+    user.password
+  );
+
+  if (!isPasswordVerified) {
+    throw new Error("Incorrect password");
+  }
+
+  const jwtPayload = {
+    id: user?.id,
+    name: user?.name,
+    email: user?.email,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: "15d",
+  });
+
+  const userInfo = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    token: accessToken,
+  };
+
+  return userInfo;
+};
+
 export const UserServices = {
   resgisterIntoDb,
+  userLoginIntoDb,
 };

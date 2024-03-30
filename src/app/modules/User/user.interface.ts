@@ -7,3 +7,8 @@ export type TUserRegister = {
     age: number;
   };
 };
+
+export type TUserLogin = {
+  email: string;
+  password: string;
+};

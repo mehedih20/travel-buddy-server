@@ -21,6 +21,22 @@ const catchAsync = (func: RequestHandler) => {
       //   });
       // }
 
+      if (err.message === "User not found") {
+        res.status(httpStatus.NOT_FOUND).json({
+          success: false,
+          message: err.message,
+          errorDetails: null,
+        });
+      }
+
+      if (err.message === "Incorrect password") {
+        res.status(httpStatus.NOT_FOUND).json({
+          success: false,
+          message: err.message,
+          errorDetails: null,
+        });
+      }
+
       next(err);
     });
   };
