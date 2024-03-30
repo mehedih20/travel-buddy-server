@@ -1,7 +1,11 @@
 import config from "../../config";
 import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
-import { TUserLogin, TUserRegister } from "./user.interface";
+import {
+  TUserLogin,
+  TUserProfileUpdate,
+  TUserRegister,
+} from "./user.interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -101,8 +105,42 @@ const getUserProfileFromDb = async (token: string) => {
   return result;
 };
 
+const updateUserProfileInDb = async (
+  token: string,
+  payload: TUserProfileUpdate
+) => {
+  const decoded = verifyToken(token);
+
+  const isUserEmailExist = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if (isUserEmailExist) {
+    throw new Error("Email already registered");
+  }
+
+  const result = await prisma.user.update({
+    where: {
+      id: decoded.id,
+    },
+    data: payload,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return result;
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
   getUserProfileFromDb,
+  updateUserProfileInDb,
 };

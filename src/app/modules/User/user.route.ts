@@ -22,5 +22,6 @@ router.post(
 );
 
 router.get("/profile", auth(), UserController.getUserProfile);
+router.put("/profile", auth(), UserController.updateUserProfile);
 
 export const UserRouter = router;

@@ -37,6 +37,14 @@ const catchAsync = (func: RequestHandler) => {
         });
       }
 
+      if (err.message === "Email already registered") {
+        res.status(httpStatus.NOT_FOUND).json({
+          success: false,
+          message: err.message,
+          errorDetails: null,
+        });
+      }
+
       next(err);
     });
   };

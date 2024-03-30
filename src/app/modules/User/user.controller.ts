@@ -36,8 +36,24 @@ const getUserProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateUserProfile = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await UserServices.updateUserProfileInDb(
+    token as string,
+    req.body
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User profile updated successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   register,
   login,
   getUserProfile,
+  updateUserProfile,
 };
