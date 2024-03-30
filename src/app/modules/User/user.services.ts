@@ -1,5 +1,6 @@
 import config from "../../config";
 import prisma from "../../utils/prisma";
+import verifyToken from "../../utils/verifyToken";
 import { TUserLogin, TUserRegister } from "./user.interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -81,7 +82,27 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
   return userInfo;
 };
 
+const getUserProfileFromDb = async (token: string) => {
+  const decoded = verifyToken(token);
+
+  const result = await prisma.user.findUnique({
+    where: {
+      id: decoded.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return result;
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
+  getUserProfileFromDb,
 };

@@ -5,6 +5,7 @@ import {
   userLoginValidationSchema,
   userRegisterValidationSchema,
 } from "./user.validation";
+import { auth } from "../../middlewares/auth";
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.post(
   validateData(userLoginValidationSchema),
   UserController.login
 );
+
+router.get("/profile", auth(), UserController.getUserProfile);
 
 export const UserRouter = router;

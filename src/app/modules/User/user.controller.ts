@@ -24,7 +24,20 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
+const getUserProfile = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await UserServices.getUserProfileFromDb(token as string);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User profile retrieved successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   register,
   login,
+  getUserProfile,
 };
