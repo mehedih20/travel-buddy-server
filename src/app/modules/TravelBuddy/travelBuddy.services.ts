@@ -1,4 +1,5 @@
 import prisma from "../../utils/prisma";
+import { TTravelBuddyRequestUpdate } from "./travelBuddy.interface";
 
 const sendTravelBuddyRequestIntoDb = async (userId: string, tripId: string) => {
   const result = await prisma.travelBuddyRequest.create({
@@ -29,7 +30,24 @@ const getTravelBuddiesFromDb = async (tripId: string) => {
   return result;
 };
 
+const updateTravelBuddyRequestIntoDb = async (
+  buddyId: string,
+  payload: TTravelBuddyRequestUpdate
+) => {
+  const result = await prisma.travelBuddyRequest.update({
+    where: {
+      id: buddyId,
+    },
+    data: {
+      status: payload.status,
+    },
+  });
+
+  return result;
+};
+
 export const TravelBuddyServices = {
   sendTravelBuddyRequestIntoDb,
   getTravelBuddiesFromDb,
+  updateTravelBuddyRequestIntoDb,
 };

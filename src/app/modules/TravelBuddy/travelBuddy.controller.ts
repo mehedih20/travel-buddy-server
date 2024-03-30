@@ -30,7 +30,23 @@ const getTravelBuddies = catchAsync(async (req, res) => {
   });
 });
 
+const updateTravelBuddyRequest = catchAsync(async (req, res) => {
+  const { buddyId } = req.params;
+  const result = await TravelBuddyServices.updateTravelBuddyRequestIntoDb(
+    buddyId,
+    req.body
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Travel buddy request responded successfully",
+    data: result,
+  });
+});
+
 export const TravelBuddyController = {
   sendTravelBuddyRequest,
   getTravelBuddies,
+  updateTravelBuddyRequest,
 };

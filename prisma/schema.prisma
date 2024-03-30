@@ -44,17 +44,11 @@ model Trip {
   @@map("trips")
 }
 
-enum Status {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
 model TravelBuddyRequest {
   id        String   @id @default(uuid())
   tripId    String
   userId    String
-  status    Status   @default(PENDING)
+  status    String   @default("PENDING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
