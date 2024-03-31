@@ -34,9 +34,14 @@ const updateTravelBuddyRequestIntoDb = async (
   buddyId: string,
   payload: TTravelBuddyRequestUpdate
 ) => {
+  const queryObj = {
+    tripId: payload.tripId,
+    userId: buddyId,
+  };
+
   const result = await prisma.travelBuddyRequest.update({
     where: {
-      id: buddyId,
+      tripId_userId: queryObj,
     },
     data: {
       status: payload.status,
