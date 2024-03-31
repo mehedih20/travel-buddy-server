@@ -31,10 +31,13 @@ const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
 
   // Configuring sorting
   const sortByFields = ["destination", "budget"];
+  const sortOrderFields = ["asc", "desc"];
 
-  const orderBy = sortByFields.includes(sortBy as string)
-    ? { [sortBy as string]: sortOrder }
-    : {};
+  const orderBy =
+    sortByFields.includes(sortBy as string) &&
+    sortOrderFields.includes(sortOrder as string)
+      ? { [sortBy as string]: sortOrder }
+      : {};
 
   const whereConditions: Prisma.TripWhereInput =
     conditions.length > 0 ? { AND: conditions } : {};
