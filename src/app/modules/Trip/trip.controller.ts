@@ -14,6 +14,20 @@ const createTrip = catchAsync(async (req, res) => {
   });
 });
 
+const getTrips = catchAsync(async (req, res) => {
+  const query = req.query;
+  const { meta, data } = await TripServices.getTripsFromDb(query);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Trips retrieved successfully",
+    meta,
+    data,
+  });
+});
+
 export const TripController = {
   createTrip,
+  getTrips,
 };

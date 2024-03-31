@@ -1,6 +1,8 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
 import { TTrip } from "./trip.interface";
+import { generateQueryConditions } from "./trip.utils";
 
 const createTripIntoDb = async (token: string, payload: TTrip) => {
   const decoded = verifyToken(token);
@@ -15,6 +17,50 @@ const createTripIntoDb = async (token: string, payload: TTrip) => {
   return result;
 };
 
+const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortBy,
+    sortOrder,
+    ...otherTerms
+  } = queryParams;
+
+  const conditions: Prisma.TripWhereInput[] =
+    generateQueryConditions(otherTerms);
+
+  // Configuring sorting
+  const sortByFields = ["destination", "budget"];
+
+  const orderBy = sortByFields.includes(sortBy as string)
+    ? { [sortBy as string]: sortOrder }
+    : {};
+
+  const whereConditions: Prisma.TripWhereInput =
+    conditions.length > 0 ? { AND: conditions } : {};
+
+  const result = await prisma.trip.findMany({
+    where: whereConditions,
+    skip: (Number(page) - 1) * Number(limit),
+    take: Number(limit),
+    orderBy,
+  });
+
+  const total = await prisma.trip.count({
+    where: whereConditions,
+  });
+
+  return {
+    meta: {
+      page: Number(page),
+      limit: Number(limit),
+      total,
+    },
+    data: result,
+  };
+};
+
 export const TripServices = {
   createTripIntoDb,
+  getTripsFromDb,
 };
