@@ -11,10 +11,12 @@ export const auth = () => {
       throw new Error("Unauthorized Access");
     }
 
-    const decoded = verifyToken(token);
+    let decoded;
 
     //checking if token is invalid
-    if (!decoded) {
+    try {
+      decoded = verifyToken(token);
+    } catch (err) {
       throw new Error("Unauthorized Access");
     }
 

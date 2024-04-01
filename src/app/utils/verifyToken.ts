@@ -4,7 +4,7 @@ import config from "../config";
 const verifyToken = (token: string) => {
   const decoded = jwt.verify(
     token,
-    config.jwt_access_secret as string
+    config.jwt_access_secret as string,
   ) as JwtPayload;
 
   return decoded;

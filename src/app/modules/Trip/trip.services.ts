@@ -4,6 +4,7 @@ import verifyToken from "../../utils/verifyToken";
 import { TTrip } from "./trip.interface";
 import { generateQueryConditions } from "./trip.utils";
 
+// Creating trip
 const createTripIntoDb = async (token: string, payload: TTrip) => {
   const decoded = verifyToken(token);
 
@@ -17,6 +18,7 @@ const createTripIntoDb = async (token: string, payload: TTrip) => {
   return result;
 };
 
+// Fetching trips with filtering and pagination
 const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
   const {
     page = 1,

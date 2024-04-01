@@ -9,11 +9,23 @@ import {
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Registering user
 const resgisterIntoDb = async (payload: TUserRegister) => {
   const hashedPassword = await bcrypt.hash(
     payload.password,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
+
+  // Checking if user exist with the email provided
+  const isUserExists = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if (isUserExists) {
+    throw new Error("User already exist!");
+  }
 
   const result = await prisma.$transaction(async (transactionClient) => {
     const newUser = await transactionClient.user.create({
@@ -44,6 +56,7 @@ const resgisterIntoDb = async (payload: TUserRegister) => {
   return result;
 };
 
+// User login
 const userLoginIntoDb = async (payload: TUserLogin) => {
   let user;
   try {
@@ -59,7 +72,7 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
   // password verify
   const isPasswordVerified = await bcrypt.compare(
     payload.password,
-    user.password
+    user.password,
   );
 
   if (!isPasswordVerified) {
@@ -72,6 +85,7 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
     email: user?.email,
   };
 
+  // jwt token generation
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: "15d",
   });
@@ -86,6 +100,7 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
   return userInfo;
 };
 
+// Fetch user profile
 const getUserProfileFromDb = async (token: string) => {
   const decoded = verifyToken(token);
 
@@ -105,21 +120,12 @@ const getUserProfileFromDb = async (token: string) => {
   return result;
 };
 
+// Update user profile
 const updateUserProfileInDb = async (
   token: string,
-  payload: TUserProfileUpdate
+  payload: TUserProfileUpdate,
 ) => {
   const decoded = verifyToken(token);
-
-  const isUserEmailExist = await prisma.user.findUnique({
-    where: {
-      email: payload.email,
-    },
-  });
-
-  if (isUserEmailExist) {
-    throw new Error("Email already registered");
-  }
 
   const result = await prisma.user.update({
     where: {

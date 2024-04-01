@@ -5,43 +5,38 @@ const catchAsync = (func: RequestHandler) => {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(func(req, res, next)).catch((err) => {
       // Handling user already exist
-      // if (err.message === "User already exist!") {
-      //   res.status(httpStatus.BAD_REQUEST).json({
-      //     success: false,
-      //     message: err.message,
-      //     data: null,
-      //   });
-      // }
+      if (err.message === "User already exist!") {
+        res.status(httpStatus.BAD_REQUEST).json({
+          success: false,
+          message: err.message,
+          errorDetails: err,
+        });
+      }
 
+      // Handling unauthorized user
       if (err.message === "Unauthorized Access") {
         res.status(httpStatus.UNAUTHORIZED).json({
           success: false,
           message: err.message,
-          errorDetails: null,
+          errorDetails: err,
         });
       }
 
+      // Handling user not found
       if (err.message === "User not found") {
         res.status(httpStatus.NOT_FOUND).json({
           success: false,
           message: err.message,
-          errorDetails: null,
+          errorDetails: err,
         });
       }
 
+      // Handling incorrect password
       if (err.message === "Incorrect password") {
         res.status(httpStatus.NOT_FOUND).json({
           success: false,
           message: err.message,
-          errorDetails: null,
-        });
-      }
-
-      if (err.message === "Email already registered") {
-        res.status(httpStatus.NOT_FOUND).json({
-          success: false,
-          message: err.message,
-          errorDetails: null,
+          errorDetails: err,
         });
       }
 

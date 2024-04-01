@@ -40,19 +40,23 @@ const zodErrorMessageGenerator = (err: ZodError) => {
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const statusCode = 500;
-  let errorMessage = "Something went wrong";
-  let errorDetails = err;
+  const errorMessage = "Something went wrong";
 
+  // Handling zod error
   if (err instanceof ZodError) {
-    const errorObj = zodErrorMessageGenerator(err);
-    errorMessage = errorObj.errorMessage;
-    errorDetails = errorObj.errorDetails;
+    const { errorMessage, errorDetails } = zodErrorMessageGenerator(err);
+
+    return res.status(statusCode).json({
+      success: false,
+      message: errorMessage,
+      errorDetails,
+    });
   }
 
   return res.status(statusCode).json({
     success: false,
-    message: errorMessage,
-    errorDetails,
+    message: err.message || errorMessage,
+    errorDetails: err,
   });
 };
 

@@ -1,6 +1,7 @@
 import prisma from "../../utils/prisma";
 import { TTravelBuddyResponse } from "./travelBuddy.interface";
 
+// Sending travel buddy request
 const sendTravelBuddyRequestIntoDb = async (userId: string, tripId: string) => {
   const result = await prisma.travelBuddyRequest.create({
     data: {
@@ -12,6 +13,7 @@ const sendTravelBuddyRequestIntoDb = async (userId: string, tripId: string) => {
   return result;
 };
 
+// Fetching all travel buddies for a specific tour
 const getTravelBuddiesFromDb = async (tripId: string) => {
   const result = await prisma.travelBuddyRequest.findMany({
     where: {
@@ -30,9 +32,10 @@ const getTravelBuddiesFromDb = async (tripId: string) => {
   return result;
 };
 
+// Responding to the travel buddy request
 const updateTravelBuddyRequestIntoDb = async (
   buddyId: string,
-  payload: TTravelBuddyResponse
+  payload: TTravelBuddyResponse,
 ) => {
   const queryObj = {
     tripId: payload.tripId,
