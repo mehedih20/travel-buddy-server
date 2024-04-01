@@ -1,5 +1,5 @@
 import prisma from "../../utils/prisma";
-import { TTravelBuddyRequestUpdate } from "./travelBuddy.interface";
+import { TTravelBuddyResponse } from "./travelBuddy.interface";
 
 const sendTravelBuddyRequestIntoDb = async (userId: string, tripId: string) => {
   const result = await prisma.travelBuddyRequest.create({
@@ -32,7 +32,7 @@ const getTravelBuddiesFromDb = async (tripId: string) => {
 
 const updateTravelBuddyRequestIntoDb = async (
   buddyId: string,
-  payload: TTravelBuddyRequestUpdate
+  payload: TTravelBuddyResponse
 ) => {
   const queryObj = {
     tripId: payload.tripId,

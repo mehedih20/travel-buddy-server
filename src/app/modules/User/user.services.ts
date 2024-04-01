@@ -30,7 +30,7 @@ const resgisterIntoDb = async (payload: TUserRegister) => {
         updatedAt: true,
       },
     });
-    transactionClient.userProfile.create({
+    await transactionClient.userProfile.create({
       data: {
         bio: payload.profile.bio,
         age: payload.profile.age,

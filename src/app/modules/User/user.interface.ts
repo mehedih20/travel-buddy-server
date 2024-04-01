@@ -14,6 +14,6 @@ export type TUserLogin = {
 };
 
 export type TUserProfileUpdate = {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
 };

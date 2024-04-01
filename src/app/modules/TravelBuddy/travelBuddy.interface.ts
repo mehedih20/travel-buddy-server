@@ -1,4 +1,4 @@
-export type TTravelBuddyRequestUpdate = {
+export type TTravelBuddyResponse = {
   tripId: string;
   status: string;
 };

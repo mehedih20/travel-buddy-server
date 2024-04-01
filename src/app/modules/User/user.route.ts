@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserController } from "./user.controller";
 import validateData from "../../middlewares/validateData";
 import {
+  updateUserProfileValidationSchema,
   userLoginValidationSchema,
   userRegisterValidationSchema,
 } from "./user.validation";
@@ -22,6 +23,12 @@ router.post(
 );
 
 router.get("/profile", auth(), UserController.getUserProfile);
-router.put("/profile", auth(), UserController.updateUserProfile);
+
+router.put(
+  "/profile",
+  auth(),
+  validateData(updateUserProfileValidationSchema),
+  UserController.updateUserProfile
+);
 
 export const UserRouter = router;
