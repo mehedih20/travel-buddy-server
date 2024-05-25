@@ -40,7 +40,7 @@ const updateUserProfile = catchAsync(async (req, res) => {
   const token = req.headers.authorization;
   const result = await UserServices.updateUserProfileInDb(
     token as string,
-    req.body
+    req.body,
   );
 
   res.status(httpStatus.OK).json({

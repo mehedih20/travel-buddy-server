@@ -1,10 +1,13 @@
 export type TUserRegister = {
   name: string;
   email: string;
+  username: string;
+  role: string;
+  photoUrl?: string;
   password: string;
-  profile: {
-    bio: string;
-    age: number;
+  profile?: {
+    bio?: string;
+    age?: number;
   };
 };
 
@@ -16,4 +19,10 @@ export type TUserLogin = {
 export type TUserProfileUpdate = {
   name?: string;
   email?: string;
+  username?: string;
+  photoUrl?: string;
+  profile?: {
+    bio?: string;
+    age?: number;
+  };
 };

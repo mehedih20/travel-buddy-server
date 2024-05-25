@@ -32,20 +32,23 @@ const resgisterIntoDb = async (payload: TUserRegister) => {
       data: {
         name: payload.name,
         email: payload.email,
+        username: payload.username,
         password: hashedPassword,
       },
       select: {
         id: true,
         name: true,
+        username: true,
         email: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
     });
     await transactionClient.userProfile.create({
       data: {
-        bio: payload.profile.bio,
-        age: payload.profile.age,
+        bio: payload?.profile?.bio,
+        age: payload?.profile?.age,
         userId: newUser.id,
       },
     });
@@ -82,7 +85,9 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
   const jwtPayload = {
     id: user?.id,
     name: user?.name,
+    username: user?.username,
     email: user?.email,
+    role: user?.role,
   };
 
   // jwt token generation
@@ -94,6 +99,7 @@ const userLoginIntoDb = async (payload: TUserLogin) => {
     id: user.id,
     name: user.name,
     email: user.email,
+    role: user.role,
     token: accessToken,
   };
 
@@ -112,6 +118,15 @@ const getUserProfileFromDb = async (token: string) => {
       id: true,
       name: true,
       email: true,
+      username: true,
+      role: true,
+      photoUrl: true,
+      userProfile: {
+        select: {
+          bio: true,
+          age: true,
+        },
+      },
       createdAt: true,
       updatedAt: true,
     },
@@ -136,6 +151,15 @@ const updateUserProfileInDb = async (
       id: true,
       name: true,
       email: true,
+      role: true,
+      username: true,
+      photoUrl: true,
+      userProfile: {
+        select: {
+          bio: true,
+          age: true,
+        },
+      },
       createdAt: true,
       updatedAt: true,
     },
