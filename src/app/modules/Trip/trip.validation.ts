@@ -6,6 +6,9 @@ const createTripValidationSchema = z.object({
   endDate: z.string(),
   budget: z.number(),
   activities: z.array(z.string()),
+  description: z.string(),
+  travelType: z.string(),
+  imageLinks: z.array(z.string()),
 });
 
 export { createTripValidationSchema };

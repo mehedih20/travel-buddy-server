@@ -9,21 +9,23 @@ export const generateQueryConditions = (query: Record<string, unknown>) => {
   // Configuring the searchTerm
   if (searchTerm) {
     conditions.push({
-      OR: ["destination", "budget"].map((field) => {
-        if (field === "budget" && Number.isInteger(Number(searchTerm))) {
-          return {
-            [field]: Number(searchTerm),
-          };
-        } else if (field !== "budget") {
-          return {
-            [field]: {
-              contains: searchTerm,
-              mode: "insensitive",
-            },
-          };
-        }
-        return {};
-      }),
+      OR: ["destination", "budget", "travelType", "description"].map(
+        (field) => {
+          if (field === "budget" && Number.isInteger(Number(searchTerm))) {
+            return {
+              [field]: Number(searchTerm),
+            };
+          } else if (field !== "budget") {
+            return {
+              [field]: {
+                contains: searchTerm,
+                mode: "insensitive",
+              },
+            };
+          }
+          return {};
+        },
+      ),
     });
   }
 
