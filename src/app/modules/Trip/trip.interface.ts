@@ -3,6 +3,7 @@ export type TTrip = {
   description: string;
   activities: string[];
   travelType: string;
+  itinerary: string[];
   imageLinks: string[];
   startDate: string;
   endDate: string;

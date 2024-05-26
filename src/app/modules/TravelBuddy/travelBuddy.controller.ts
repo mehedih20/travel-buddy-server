@@ -3,11 +3,8 @@ import catchAsync from "../../utils/catchAsync";
 import { TravelBuddyServices } from "./travelBuddy.services";
 
 const sendTravelBuddyRequest = catchAsync(async (req, res) => {
-  const { tripId } = req.params;
-  const { userId } = req.body;
   const result = await TravelBuddyServices.sendTravelBuddyRequestIntoDb(
-    userId,
-    tripId
+    req.body,
   );
 
   res.status(httpStatus.OK).json({
@@ -34,7 +31,7 @@ const updateTravelBuddyRequest = catchAsync(async (req, res) => {
   const { buddyId } = req.params;
   const result = await TravelBuddyServices.updateTravelBuddyRequestIntoDb(
     buddyId,
-    req.body
+    req.body,
   );
 
   res.status(httpStatus.OK).json({

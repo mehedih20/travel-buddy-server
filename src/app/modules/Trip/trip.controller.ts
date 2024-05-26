@@ -27,7 +27,32 @@ const getTrips = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleTrip = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await TripServices.getSingleTrip(id);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Trip retrieved successfully",
+    data: result,
+  });
+});
+
+const getTravelTypes = catchAsync(async (req, res) => {
+  const result = await TripServices.getTravelTypes();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Travel types retrieved successfully",
+    data: result,
+  });
+});
+
 export const TripController = {
   createTrip,
   getTrips,
+  getSingleTrip,
+  getTravelTypes,
 };

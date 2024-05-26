@@ -1,13 +1,13 @@
 import prisma from "../../utils/prisma";
-import { TTravelBuddyResponse } from "./travelBuddy.interface";
+import {
+  TTravelBuddyPayload,
+  TTravelBuddyResponse,
+} from "./travelBuddy.interface";
 
 // Sending travel buddy request
-const sendTravelBuddyRequestIntoDb = async (userId: string, tripId: string) => {
+const sendTravelBuddyRequestIntoDb = async (payload: TTravelBuddyPayload) => {
   const result = await prisma.travelBuddyRequest.create({
-    data: {
-      userId,
-      tripId,
-    },
+    data: payload,
   });
 
   return result;

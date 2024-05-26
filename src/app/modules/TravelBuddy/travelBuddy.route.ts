@@ -10,23 +10,23 @@ import {
 const router = Router();
 
 router.post(
-  "/trip/:tripId/request",
+  "/trip/request",
   auth(),
   validateData(travelBuddyRequestValidationSchema),
-  TravelBuddyController.sendTravelBuddyRequest
+  TravelBuddyController.sendTravelBuddyRequest,
 );
 
 router.get(
   "/travel-buddies/:tripId",
   auth(),
-  TravelBuddyController.getTravelBuddies
+  TravelBuddyController.getTravelBuddies,
 );
 
 router.put(
   "/travel-buddies/:buddyId/respond",
   auth(),
   validateData(travelBuddyResponseValidationSchema),
-  TravelBuddyController.updateTravelBuddyRequest
+  TravelBuddyController.updateTravelBuddyRequest,
 );
 
 export const TravelBuddyRouter = router;

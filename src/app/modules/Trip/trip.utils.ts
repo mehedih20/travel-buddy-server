@@ -1,31 +1,36 @@
 import { Prisma } from "@prisma/client";
 
 export const generateQueryConditions = (query: Record<string, unknown>) => {
-  const { searchTerm, destination, startDate, endDate, minBudget, maxBudget } =
-    query;
+  const {
+    searchTerm,
+    destination,
+    travelType,
+    startDate,
+    endDate,
+    minBudget,
+    maxBudget,
+  } = query;
 
   const conditions: Prisma.TripWhereInput[] = [];
 
   // Configuring the searchTerm
   if (searchTerm) {
     conditions.push({
-      OR: ["destination", "budget", "travelType", "description"].map(
-        (field) => {
-          if (field === "budget" && Number.isInteger(Number(searchTerm))) {
-            return {
-              [field]: Number(searchTerm),
-            };
-          } else if (field !== "budget") {
-            return {
-              [field]: {
-                contains: searchTerm,
-                mode: "insensitive",
-              },
-            };
-          }
-          return {};
-        },
-      ),
+      OR: ["destination", "budget", "description"].map((field) => {
+        if (field === "budget" && Number.isInteger(Number(searchTerm))) {
+          return {
+            [field]: Number(searchTerm),
+          };
+        } else if (field !== "budget") {
+          return {
+            [field]: {
+              contains: searchTerm,
+              mode: "insensitive",
+            },
+          };
+        }
+        return {};
+      }),
     });
   }
 
@@ -34,6 +39,14 @@ export const generateQueryConditions = (query: Record<string, unknown>) => {
     conditions.push({
       destination: {
         contains: destination.toString(),
+        mode: "insensitive",
+      },
+    });
+  }
+  if (travelType) {
+    conditions.push({
+      travelType: {
+        contains: travelType.toString(),
         mode: "insensitive",
       },
     });

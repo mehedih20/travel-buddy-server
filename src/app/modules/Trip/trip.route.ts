@@ -10,9 +10,13 @@ router.post(
   "/trips",
   auth(),
   validateData(createTripValidationSchema),
-  TripController.createTrip
+  TripController.createTrip,
 );
 
 router.get("/trips", TripController.getTrips);
+
+router.get("/trips/:id", TripController.getSingleTrip);
+
+router.get("/travel-types", TripController.getTravelTypes);
 
 export const TripRouter = router;

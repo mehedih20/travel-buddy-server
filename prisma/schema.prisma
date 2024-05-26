@@ -35,8 +35,9 @@ model Trip {
   userId      String
   destination String
   description String
-  activities  String[]
   travelType  String
+  activities  String[]
+  itinerary   String[]
   imageLinks  String[]
   startDate   String
   endDate     String
@@ -51,12 +52,14 @@ model Trip {
 }
 
 model TravelBuddyRequest {
-  id        String   @id @default(uuid())
-  tripId    String
-  userId    String
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  tripId          String
+  userId          String
+  userEmail       String
+  tripDestination String
+  status          String   @default("PENDING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   trip Trip @relation(fields: [tripId], references: [id])
   user User @relation(fields: [userId], references: [id])

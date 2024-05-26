@@ -20,13 +20,7 @@ const createTripIntoDb = async (token: string, payload: TTrip) => {
 
 // Fetching trips with filtering and pagination
 const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
-  const {
-    page = 1,
-    limit = 10,
-    sortBy,
-    sortOrder,
-    ...otherTerms
-  } = queryParams;
+  const { page = 1, limit = 9, sortBy, sortOrder, ...otherTerms } = queryParams;
 
   const conditions: Prisma.TripWhereInput[] =
     generateQueryConditions(otherTerms);
@@ -65,7 +59,35 @@ const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
   };
 };
 
+// Fetching single trip
+const getSingleTrip = async (tripId: string) => {
+  const result = await prisma.trip.findUnique({
+    where: {
+      id: tripId,
+    },
+  });
+
+  return result;
+};
+
+// Get travel types
+const getTravelTypes = async () => {
+  const result = await prisma.trip.findMany({
+    where: {},
+    distinct: ["travelType"],
+    select: {
+      travelType: true,
+    },
+  });
+
+  const travelTypes = result.map((item) => item.travelType);
+
+  return travelTypes;
+};
+
 export const TripServices = {
   createTripIntoDb,
   getTripsFromDb,
+  getSingleTrip,
+  getTravelTypes,
 };

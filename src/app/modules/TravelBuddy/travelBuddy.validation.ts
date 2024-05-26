@@ -7,6 +7,9 @@ const travelBuddyResponseValidationSchema = z.object({
 
 const travelBuddyRequestValidationSchema = z.object({
   userId: z.string(),
+  tripId: z.string(),
+  userEmail: z.string(),
+  tripDestination: z.string(),
 });
 
 export {
