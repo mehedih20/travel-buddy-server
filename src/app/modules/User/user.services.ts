@@ -3,6 +3,7 @@ import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
 import {
   TUserLogin,
+  TUserPhotoUpdate,
   TUserProfileUpdate,
   TUserRegister,
 } from "./user.interface";
@@ -33,6 +34,7 @@ const resgisterIntoDb = async (payload: TUserRegister) => {
         name: payload.name,
         email: payload.email,
         username: payload.username,
+        photoUrl: payload.photoUrl || null,
         password: hashedPassword,
       },
       select: {
@@ -142,6 +144,59 @@ const updateUserProfileInDb = async (
 ) => {
   const decoded = verifyToken(token);
 
+  const result = await prisma.$transaction(async (tx) => {
+    const { profile, ...infoWithoutProfile } = payload;
+    const userResponse = await tx.user.update({
+      where: {
+        id: decoded.id,
+      },
+      data: infoWithoutProfile,
+    });
+
+    await tx.userProfile.update({
+      where: {
+        userId: userResponse.id,
+      },
+      data: {
+        bio: profile?.bio,
+        age: profile?.age,
+      },
+    });
+
+    const upadatedUser = await tx.user.findUnique({
+      where: {
+        id: decoded.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        username: true,
+        role: true,
+        photoUrl: true,
+        userProfile: {
+          select: {
+            bio: true,
+            age: true,
+          },
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    return upadatedUser;
+  });
+
+  return result;
+};
+
+// Update user photo
+const updateUserPhotoInDb = async (
+  token: string,
+  payload: TUserPhotoUpdate,
+) => {
+  const decoded = verifyToken(token);
+
   const result = await prisma.user.update({
     where: {
       id: decoded.id,
@@ -151,15 +206,7 @@ const updateUserProfileInDb = async (
       id: true,
       name: true,
       email: true,
-      role: true,
-      username: true,
       photoUrl: true,
-      userProfile: {
-        select: {
-          bio: true,
-          age: true,
-        },
-      },
       createdAt: true,
       updatedAt: true,
     },
@@ -173,4 +220,5 @@ export const UserServices = {
   userLoginIntoDb,
   getUserProfileFromDb,
   updateUserProfileInDb,
+  updateUserPhotoInDb,
 };

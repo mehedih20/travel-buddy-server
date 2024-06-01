@@ -51,9 +51,25 @@ const updateUserProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateUserPhoto = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await UserServices.updateUserPhotoInDb(
+    token as string,
+    req.body,
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User photo updated successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   register,
   login,
   getUserProfile,
   updateUserProfile,
+  updateUserPhoto,
 };

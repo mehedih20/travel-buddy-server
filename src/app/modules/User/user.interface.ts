@@ -20,9 +20,11 @@ export type TUserProfileUpdate = {
   name?: string;
   email?: string;
   username?: string;
-  photoUrl?: string;
   profile?: {
     bio?: string;
     age?: number;
   };
+};
+export type TUserPhotoUpdate = {
+  photoUrl: string;
 };

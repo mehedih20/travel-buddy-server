@@ -25,7 +25,6 @@ const updateUserProfileValidationSchema = z.object({
   email: z.string().email().optional(),
   username: z.string().optional(),
   role: z.string().optional(),
-  photoUrl: z.string().optional(),
   profile: z
     .object({
       bio: z.string().optional(),
@@ -34,8 +33,13 @@ const updateUserProfileValidationSchema = z.object({
     .optional(),
 });
 
+const updateUserPhotoValidationSchema = z.object({
+  photoUrl: z.string(),
+});
+
 export {
   userRegisterValidationSchema,
   userLoginValidationSchema,
   updateUserProfileValidationSchema,
+  updateUserPhotoValidationSchema,
 };
