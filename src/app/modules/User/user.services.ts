@@ -2,6 +2,7 @@ import config from "../../config";
 import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
 import {
+  TCheckUserPassword,
   TUserLogin,
   TUserPasswordChange,
   TUserPhotoUpdate,
@@ -216,7 +217,7 @@ const updateUserPhotoInDb = async (
   return result;
 };
 
-// Update user photo
+// Update user password
 const userPasswordChangeInDb = async (
   token: string,
   payload: TUserPasswordChange,
@@ -259,6 +260,32 @@ const userPasswordChangeInDb = async (
   });
 };
 
+// Check user password
+const checkUserPasswordInDb = async (
+  token: string,
+  payload: TCheckUserPassword,
+) => {
+  const decoded = verifyToken(token);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: decoded.id,
+    },
+  });
+
+  let isPasswordVerified;
+
+  if (user) {
+    isPasswordVerified = await bcrypt.compare(payload.password, user?.password);
+  }
+
+  if (isPasswordVerified) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
@@ -266,4 +293,5 @@ export const UserServices = {
   updateUserProfileInDb,
   updateUserPhotoInDb,
   userPasswordChangeInDb,
+  checkUserPasswordInDb,
 };

@@ -47,4 +47,6 @@ router.put(
   UserController.userPasswordChange,
 );
 
+router.get("/check-password", auth(), UserController.checkUserPassword);
+
 export const UserRouter = router;

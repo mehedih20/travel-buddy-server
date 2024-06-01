@@ -34,3 +34,7 @@ export type TUserPasswordChange = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type TCheckUserPassword = {
+  password: string;
+};
