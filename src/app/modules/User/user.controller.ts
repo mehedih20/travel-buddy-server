@@ -66,10 +66,22 @@ const updateUserPhoto = catchAsync(async (req, res) => {
   });
 });
 
+const userPasswordChange = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  await UserServices.userPasswordChangeInDb(token as string, req.body);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User password changed successfully",
+  });
+});
+
 export const UserController = {
   register,
   login,
   getUserProfile,
   updateUserProfile,
   updateUserPhoto,
+  userPasswordChange,
 };

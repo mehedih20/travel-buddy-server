@@ -25,6 +25,12 @@ export type TUserProfileUpdate = {
     age?: number;
   };
 };
+
 export type TUserPhotoUpdate = {
   photoUrl: string;
+};
+
+export type TUserPasswordChange = {
+  oldPassword: string;
+  newPassword: string;
 };

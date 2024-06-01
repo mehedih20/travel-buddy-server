@@ -5,6 +5,7 @@ import {
   updateUserPhotoValidationSchema,
   updateUserProfileValidationSchema,
   userLoginValidationSchema,
+  userPasswordChangeValidationSchema,
   userRegisterValidationSchema,
 } from "./user.validation";
 import { auth } from "../../middlewares/auth";
@@ -37,6 +38,13 @@ router.put(
   auth(),
   validateData(updateUserPhotoValidationSchema),
   UserController.updateUserPhoto,
+);
+
+router.put(
+  "/change-password",
+  auth(),
+  validateData(userPasswordChangeValidationSchema),
+  UserController.userPasswordChange,
 );
 
 export const UserRouter = router;

@@ -37,9 +37,15 @@ const updateUserPhotoValidationSchema = z.object({
   photoUrl: z.string(),
 });
 
+const userPasswordChangeValidationSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: z.string(),
+});
+
 export {
   userRegisterValidationSchema,
   userLoginValidationSchema,
   updateUserProfileValidationSchema,
   updateUserPhotoValidationSchema,
+  userPasswordChangeValidationSchema,
 };

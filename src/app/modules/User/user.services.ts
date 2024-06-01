@@ -3,6 +3,7 @@ import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
 import {
   TUserLogin,
+  TUserPasswordChange,
   TUserPhotoUpdate,
   TUserProfileUpdate,
   TUserRegister,
@@ -215,10 +216,54 @@ const updateUserPhotoInDb = async (
   return result;
 };
 
+// Update user photo
+const userPasswordChangeInDb = async (
+  token: string,
+  payload: TUserPasswordChange,
+) => {
+  const decoded = verifyToken(token);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: decoded.id,
+    },
+  });
+
+  let isPasswordVerified;
+
+  if (user) {
+    isPasswordVerified = await bcrypt.compare(
+      payload.oldPassword,
+      user?.password,
+    );
+  }
+
+  let newHashedPassword;
+
+  if (isPasswordVerified) {
+    newHashedPassword = await bcrypt.hash(
+      payload.newPassword,
+      Number(config.bcrypt_salt_rounds),
+    );
+  } else {
+    throw new Error("Incorrect password");
+  }
+
+  await prisma.user.update({
+    where: {
+      id: decoded.id,
+    },
+    data: {
+      password: newHashedPassword,
+    },
+  });
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
   getUserProfileFromDb,
   updateUserProfileInDb,
   updateUserPhotoInDb,
+  userPasswordChangeInDb,
 };
