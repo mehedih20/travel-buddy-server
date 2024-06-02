@@ -29,4 +29,10 @@ router.put(
   TravelBuddyController.updateTravelBuddyRequest,
 );
 
+router.get(
+  "/user/buddy-request",
+  auth(),
+  TravelBuddyController.getSingleUserBuddyRequest,
+);
+
 export const TravelBuddyRouter = router;

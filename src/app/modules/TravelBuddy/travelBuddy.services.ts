@@ -1,4 +1,5 @@
 import prisma from "../../utils/prisma";
+import verifyToken from "../../utils/verifyToken";
 import {
   TTravelBuddyPayload,
   TTravelBuddyResponse,
@@ -54,8 +55,25 @@ const updateTravelBuddyRequestIntoDb = async (
   return result;
 };
 
+const getSingleUserBuddyRequestFromDb = async (token: string) => {
+  const decoded = verifyToken(token);
+
+  const result = await prisma.travelBuddyRequest.findMany({
+    where: {
+      userId: decoded?.id,
+    },
+    select: {
+      tripDestination: true,
+      status: true,
+    },
+  });
+
+  return result;
+};
+
 export const TravelBuddyServices = {
   sendTravelBuddyRequestIntoDb,
   getTravelBuddiesFromDb,
   updateTravelBuddyRequestIntoDb,
+  getSingleUserBuddyRequestFromDb,
 };
