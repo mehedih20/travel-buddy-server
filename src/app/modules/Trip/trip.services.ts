@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
-import { TTrip } from "./trip.interface";
+import { TTrip, TUpdateTrip } from "./trip.interface";
 import { generateQueryConditions } from "./trip.utils";
 
 // Creating trip
@@ -70,6 +70,54 @@ const getSingleTrip = async (tripId: string) => {
   return result;
 };
 
+// Fetching trips created by an user
+const getTripsCreatedByUserFromDb = async (token: string) => {
+  const decoded = verifyToken(token);
+
+  const result = await prisma.trip.findMany({
+    where: {
+      userId: decoded?.id,
+    },
+  });
+
+  return result;
+};
+
+// Update trip
+const updateTripInDb = async (tripId: string, payload: TUpdateTrip) => {
+  const result = await prisma.trip.update({
+    where: {
+      id: tripId,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+
+// Delete Trip
+const deleteUserTripFromDb = async (token: string, tripId: string) => {
+  const decoded = verifyToken(token);
+
+  const trip = await prisma.trip.findUnique({
+    where: {
+      id: tripId,
+    },
+  });
+
+  if (trip?.userId !== decoded.id) {
+    throw new Error("Unauthorized Access");
+  }
+
+  const result = await prisma.trip.delete({
+    where: {
+      id: tripId,
+    },
+  });
+
+  return result;
+};
+
 // Get travel types
 const getTravelTypes = async () => {
   const result = await prisma.trip.findMany({
@@ -90,4 +138,7 @@ export const TripServices = {
   getTripsFromDb,
   getSingleTrip,
   getTravelTypes,
+  getTripsCreatedByUserFromDb,
+  deleteUserTripFromDb,
+  updateTripInDb,
 };

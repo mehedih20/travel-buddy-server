@@ -39,6 +39,48 @@ const getSingleTrip = catchAsync(async (req, res) => {
   });
 });
 
+const getTripsCreatedByUser = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await TripServices.getTripsCreatedByUserFromDb(
+    token as string,
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User trips retrieved successfully",
+    data: result,
+  });
+});
+
+const updateTrip = catchAsync(async (req, res) => {
+  const { tripId } = req.params;
+  const result = await TripServices.updateTripInDb(tripId, req.body);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Trip updated successfully",
+    data: result,
+  });
+});
+
+const deleteUserTrip = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const { tripId } = req.params;
+  const result = await TripServices.deleteUserTripFromDb(
+    token as string,
+    tripId,
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Trip deleted successfully",
+    data: result,
+  });
+});
+
 const getTravelTypes = catchAsync(async (req, res) => {
   const result = await TripServices.getTravelTypes();
 
@@ -55,4 +97,7 @@ export const TripController = {
   getTrips,
   getSingleTrip,
   getTravelTypes,
+  getTripsCreatedByUser,
+  deleteUserTrip,
+  updateTrip,
 };

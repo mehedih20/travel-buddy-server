@@ -12,4 +12,16 @@ const createTripValidationSchema = z.object({
   budget: z.number(),
 });
 
-export { createTripValidationSchema };
+const updateTripValidationSchema = z.object({
+  destination: z.string().optional(),
+  description: z.string().optional(),
+  travelType: z.string().optional(),
+  activities: z.array(z.string()).optional(),
+  itinerary: z.array(z.string()).optional(),
+  imageLinks: z.array(z.string()).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  budget: z.number().optional(),
+});
+
+export { createTripValidationSchema, updateTripValidationSchema };

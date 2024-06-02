@@ -17,6 +17,12 @@ router.get("/trips", TripController.getTrips);
 
 router.get("/trips/:id", TripController.getSingleTrip);
 
+router.get("/user/trips", TripController.getTripsCreatedByUser);
+
+router.put("/update-trip/:tripId", TripController.updateTrip);
+
+router.delete("/delete-trip/:tripId", TripController.deleteUserTrip);
+
 router.get("/travel-types", TripController.getTravelTypes);
 
 export const TripRouter = router;
