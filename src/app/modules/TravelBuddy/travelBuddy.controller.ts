@@ -56,9 +56,26 @@ const getSingleUserBuddyRequest = catchAsync(async (req, res) => {
   });
 });
 
+const checkBuddyRequest = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const { tripId } = req.params;
+  const result = await TravelBuddyServices.checkBuddyRequestInDb(
+    token as string,
+    tripId,
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Buddy check result fetched successfully",
+    result,
+  });
+});
+
 export const TravelBuddyController = {
   sendTravelBuddyRequest,
   getTravelBuddies,
   updateTravelBuddyRequest,
   getSingleUserBuddyRequest,
+  checkBuddyRequest,
 };

@@ -55,6 +55,7 @@ const updateTravelBuddyRequestIntoDb = async (
   return result;
 };
 
+// Fetching request made by an user
 const getSingleUserBuddyRequestFromDb = async (token: string) => {
   const decoded = verifyToken(token);
 
@@ -71,9 +72,30 @@ const getSingleUserBuddyRequestFromDb = async (token: string) => {
   return result;
 };
 
+// Checking user request for a trip
+const checkBuddyRequestInDb = async (token: string, tripId: string) => {
+  const decoded = verifyToken(token);
+
+  const result = await prisma.travelBuddyRequest.findUnique({
+    where: {
+      tripId_userId: {
+        tripId,
+        userId: decoded?.id,
+      },
+    },
+  });
+
+  if (result) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const TravelBuddyServices = {
   sendTravelBuddyRequestIntoDb,
   getTravelBuddiesFromDb,
   updateTravelBuddyRequestIntoDb,
   getSingleUserBuddyRequestFromDb,
+  checkBuddyRequestInDb,
 };

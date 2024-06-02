@@ -35,4 +35,10 @@ router.get(
   TravelBuddyController.getSingleUserBuddyRequest,
 );
 
+router.get(
+  "/user/check-request/:tripId",
+  auth(),
+  TravelBuddyController.checkBuddyRequest,
+);
+
 export const TravelBuddyRouter = router;
