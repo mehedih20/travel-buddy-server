@@ -19,6 +19,7 @@ model User {
   email              String               @unique
   username           String               @unique
   role               String               @default("user")
+  status             String               @default("active")
   photoUrl           String?
   password           String
   createdAt          DateTime             @default(now())

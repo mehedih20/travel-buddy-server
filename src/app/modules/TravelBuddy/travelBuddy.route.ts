@@ -11,33 +11,33 @@ const router = Router();
 
 router.post(
   "/trip/request",
-  auth(),
+  auth("user"),
   validateData(travelBuddyRequestValidationSchema),
   TravelBuddyController.sendTravelBuddyRequest,
 );
 
 router.get(
   "/travel-buddies/:tripId",
-  auth(),
+  auth("user", "admin"),
   TravelBuddyController.getTravelBuddies,
 );
 
 router.put(
   "/travel-buddies/:buddyId/respond",
-  auth(),
+  auth("admin"),
   validateData(travelBuddyResponseValidationSchema),
   TravelBuddyController.updateTravelBuddyRequest,
 );
 
 router.get(
   "/user/buddy-request",
-  auth(),
+  auth("user"),
   TravelBuddyController.getSingleUserBuddyRequest,
 );
 
 router.get(
   "/user/check-request/:tripId",
-  auth(),
+  auth("user"),
   TravelBuddyController.checkBuddyRequest,
 );
 

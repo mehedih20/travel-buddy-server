@@ -17,11 +17,19 @@ router.get("/trips", TripController.getTrips);
 
 router.get("/trips/:id", TripController.getSingleTrip);
 
-router.get("/user/trips", TripController.getTripsCreatedByUser);
+router.get("/user/trips", auth("user"), TripController.getTripsCreatedByUser);
 
-router.put("/update-trip/:tripId", TripController.updateTrip);
+router.put(
+  "/update-trip/:tripId",
+  auth("user", "admin"),
+  TripController.updateTrip,
+);
 
-router.delete("/delete-trip/:tripId", TripController.deleteUserTrip);
+router.delete(
+  "/delete-trip/:tripId",
+  auth("user", "admin"),
+  TripController.deleteUserTrip,
+);
 
 router.get("/travel-types", TripController.getTravelTypes);
 

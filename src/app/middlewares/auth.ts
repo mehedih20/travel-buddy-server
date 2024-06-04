@@ -2,7 +2,9 @@ import catchAsync from "../utils/catchAsync";
 import prisma from "../utils/prisma";
 import verifyToken from "../utils/verifyToken";
 
-export const auth = () => {
+type TUserRole = "user" | "admin" | "super-admin";
+
+export const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
     const token = req.headers.authorization;
 
@@ -36,6 +38,12 @@ export const auth = () => {
 
     //checking if user exists
     if (!user) {
+      throw new Error("Unauthorized Access");
+    }
+
+    // verifying user role
+    const userRole = user.role as TUserRole;
+    if (requiredRoles && !requiredRoles.includes(userRole)) {
       throw new Error("Unauthorized Access");
     }
 

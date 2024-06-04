@@ -286,6 +286,97 @@ const checkUserPasswordInDb = async (
   }
 };
 
+const changeUserRoleInDB = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  let result;
+  if (user?.role === "user") {
+    result = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role: "admin",
+      },
+      select: {
+        email: true,
+        role: true,
+      },
+    });
+  } else if (user?.role === "admin") {
+    result = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role: "user",
+      },
+      select: {
+        email: true,
+        role: true,
+      },
+    });
+  }
+
+  return result;
+};
+
+const changeUserStatusInDB = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  let result;
+  if (user?.status === "active") {
+    result = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        status: "deactivated",
+      },
+      select: {
+        email: true,
+        status: true,
+      },
+    });
+  } else if (user?.status === "deactivated") {
+    result = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        status: "active",
+      },
+      select: {
+        email: true,
+        status: true,
+      },
+    });
+  }
+
+  return result;
+};
+
+const getUsersFromDb = async () => {
+  const result = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      username: true,
+      role: true,
+      status: true,
+    },
+  });
+
+  return result;
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
@@ -294,4 +385,7 @@ export const UserServices = {
   updateUserPhotoInDb,
   userPasswordChangeInDb,
   checkUserPasswordInDb,
+  changeUserRoleInDB,
+  changeUserStatusInDB,
+  getUsersFromDb,
 };

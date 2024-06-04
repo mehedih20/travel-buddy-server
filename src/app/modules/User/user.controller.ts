@@ -92,6 +92,41 @@ const checkUserPassword = catchAsync(async (req, res) => {
   });
 });
 
+const changeUserRole = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await UserServices.changeUserRoleInDB(userId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User role changed successfully",
+    data: result,
+  });
+});
+
+const changeUserStatus = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await UserServices.changeUserStatusInDB(userId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User status changed successfully",
+    data: result,
+  });
+});
+
+const getUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getUsersFromDb();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Users fetched successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   register,
   login,
@@ -100,4 +135,7 @@ export const UserController = {
   updateUserPhoto,
   userPasswordChange,
   checkUserPassword,
+  changeUserRole,
+  changeUserStatus,
+  getUsers,
 };
