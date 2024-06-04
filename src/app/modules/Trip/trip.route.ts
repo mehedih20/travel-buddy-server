@@ -8,7 +8,7 @@ const router = Router();
 
 router.post(
   "/trips",
-  auth(),
+  auth("user"),
   validateData(createTripValidationSchema),
   TripController.createTrip,
 );

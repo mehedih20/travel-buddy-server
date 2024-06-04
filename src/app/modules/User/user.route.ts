@@ -24,7 +24,7 @@ router.post(
   UserController.login,
 );
 
-router.get("/profile", auth(), UserController.getUserProfile);
+router.get("/profile", auth("user"), UserController.getUserProfile);
 
 router.put(
   "/profile",
@@ -50,12 +50,16 @@ router.put(
 router.post("/check-password", auth("user"), UserController.checkUserPassword);
 
 router.put(
-  "/change-role",
+  "/change-role/:userId",
   auth("admin", "super-admin"),
   UserController.changeUserRole,
 );
 
-router.put("/change-status", auth("admin"), UserController.changeUserStatus);
+router.put(
+  "/change-status/:userId",
+  auth("admin"),
+  UserController.changeUserStatus,
+);
 
 router.get("/users", auth("admin", "super-admin"), UserController.getUsers);
 

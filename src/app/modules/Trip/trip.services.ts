@@ -96,23 +96,21 @@ const updateTripInDb = async (tripId: string, payload: TUpdateTrip) => {
 };
 
 // Delete Trip
-const deleteUserTripFromDb = async (token: string, tripId: string) => {
-  const decoded = verifyToken(token);
+const deleteUserTripFromDb = async (tripId: string) => {
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.travelBuddyRequest.deleteMany({
+      where: {
+        tripId: tripId,
+      },
+    });
 
-  const trip = await prisma.trip.findUnique({
-    where: {
-      id: tripId,
-    },
-  });
+    const tripDeleted = await tx.trip.delete({
+      where: {
+        id: tripId,
+      },
+    });
 
-  if (trip?.userId !== decoded.id) {
-    throw new Error("Unauthorized Access");
-  }
-
-  const result = await prisma.trip.delete({
-    where: {
-      id: tripId,
-    },
+    return tripDeleted;
   });
 
   return result;

@@ -66,12 +66,8 @@ const updateTrip = catchAsync(async (req, res) => {
 });
 
 const deleteUserTrip = catchAsync(async (req, res) => {
-  const token = req.headers.authorization;
   const { tripId } = req.params;
-  const result = await TripServices.deleteUserTripFromDb(
-    token as string,
-    tripId,
-  );
+  const result = await TripServices.deleteUserTripFromDb(tripId);
 
   res.status(httpStatus.OK).json({
     success: true,

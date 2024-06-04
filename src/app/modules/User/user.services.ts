@@ -362,8 +362,18 @@ const changeUserStatusInDB = async (userId: string) => {
   return result;
 };
 
-const getUsersFromDb = async () => {
+const getUsersFromDb = async (token: string) => {
+  const decoded = verifyToken(token);
+
   const result = await prisma.user.findMany({
+    where: {
+      role: {
+        in: ["user", "admin"],
+      },
+      NOT: {
+        id: decoded?.id,
+      },
+    },
     select: {
       id: true,
       name: true,

@@ -117,7 +117,8 @@ const changeUserStatus = catchAsync(async (req, res) => {
 });
 
 const getUsers = catchAsync(async (req, res) => {
-  const result = await UserServices.getUsersFromDb();
+  const token = req.headers.authorization;
+  const result = await UserServices.getUsersFromDb(token as string);
 
   res.status(httpStatus.OK).json({
     success: true,
