@@ -20,13 +20,19 @@ const createTripIntoDb = async (token: string, payload: TTrip) => {
 
 // Fetching trips with filtering and pagination
 const getTripsFromDb = async (queryParams: Record<string, unknown>) => {
-  const { page = 1, limit = 9, sortBy, sortOrder, ...otherTerms } = queryParams;
+  const {
+    page = 1,
+    limit = 10,
+    sortBy,
+    sortOrder,
+    ...otherTerms
+  } = queryParams;
 
   const conditions: Prisma.TripWhereInput[] =
     generateQueryConditions(otherTerms);
 
   // Configuring sorting
-  const sortByFields = ["destination", "budget"];
+  const sortByFields = ["destination", "budget", "createdAt"];
   const sortOrderFields = ["asc", "desc"];
 
   const orderBy =

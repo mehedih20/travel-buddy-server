@@ -81,3 +81,15 @@ model UserProfile {
 
   @@map("userProfiles")
 }
+
+model Destination {
+  id          String   @id @default(uuid())
+  name        String
+  imageUrl    String
+  description String
+  rating      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("destinations")
+}
