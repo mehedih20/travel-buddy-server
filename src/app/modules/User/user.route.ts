@@ -73,6 +73,14 @@ router.get("/users", auth("admin", "super-admin"), UserController.getUsers);
 
 router.post("/check-status", UserController.checkUserStatus);
 
-router.post("/check-email-username", UserController.checkEmailUsername);
+router.post(
+  "/check-profile-update-credentials",
+  auth("user", "admin", "super-admin"),
+  UserController.checkProfileUpdateCredentials,
+);
+router.post(
+  "/check-registration-credentials",
+  UserController.checkRegistrationCredentials,
+);
 
 export const UserRouter = router;

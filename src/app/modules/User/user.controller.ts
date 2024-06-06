@@ -139,13 +139,30 @@ const checkUserStatus = catchAsync(async (req, res) => {
   });
 });
 
-const checkEmailUsername = catchAsync(async (req, res) => {
-  const result = await UserServices.checkEmailUsernameFromDb(req.body);
+const checkProfileUpdateCredentials = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await UserServices.checkProfileUpdateCredentialsFromDb(
+    token as string,
+    req.body,
+  );
 
   res.status(httpStatus.OK).json({
     success: true,
     statusCode: 200,
-    message: "Email and username checked successfully",
+    message: "Profile update credentials checked successfully",
+    data: result,
+  });
+});
+
+const checkRegistrationCredentials = catchAsync(async (req, res) => {
+  const result = await UserServices.checkRegistrationCredentialsFromDb(
+    req.body,
+  );
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Registration credentials checked successfully",
     data: result,
   });
 });
@@ -162,5 +179,6 @@ export const UserController = {
   changeUserStatus,
   getUsers,
   checkUserStatus,
-  checkEmailUsername,
+  checkProfileUpdateCredentials,
+  checkRegistrationCredentials,
 };

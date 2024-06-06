@@ -404,7 +404,61 @@ const checkUserStatusFromDb = async (payload: TCheckUserStatus) => {
   return user?.status;
 };
 
-const checkEmailUsernameFromDb = async (payload: TCheckEmailUsername) => {
+const checkProfileUpdateCredentialsFromDb = async (
+  token: string,
+  payload: TCheckEmailUsername,
+) => {
+  const decoded = verifyToken(token);
+  let isEmailExists: any = false;
+  let isUsernameExists: any = false;
+
+  if (payload.email) {
+    isEmailExists = await prisma.user.findUnique({
+      where: {
+        email: payload?.email,
+        NOT: {
+          id: decoded?.id,
+        },
+      },
+    });
+  }
+  if (payload.username) {
+    isUsernameExists = await prisma.user.findUnique({
+      where: {
+        username: payload?.username,
+        NOT: {
+          id: decoded?.id,
+        },
+      },
+    });
+  }
+
+  if (isEmailExists && isUsernameExists) {
+    return {
+      email: true,
+      username: true,
+    };
+  } else if (isEmailExists && !isUsernameExists) {
+    return {
+      email: true,
+      username: false,
+    };
+  } else if (!isEmailExists && isUsernameExists) {
+    return {
+      email: false,
+      username: true,
+    };
+  } else {
+    return {
+      email: false,
+      username: false,
+    };
+  }
+};
+
+const checkRegistrationCredentialsFromDb = async (
+  payload: TCheckEmailUsername,
+) => {
   let isEmailExists: any = false;
   let isUsernameExists: any = false;
 
@@ -458,5 +512,6 @@ export const UserServices = {
   changeUserStatusInDB,
   getUsersFromDb,
   checkUserStatusFromDb,
-  checkEmailUsernameFromDb,
+  checkProfileUpdateCredentialsFromDb,
+  checkRegistrationCredentialsFromDb,
 };
