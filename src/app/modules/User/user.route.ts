@@ -65,7 +65,7 @@ router.put(
 
 router.put(
   "/change-status/:userId",
-  auth("admin"),
+  auth("admin", "super-admin"),
   UserController.changeUserStatus,
 );
 

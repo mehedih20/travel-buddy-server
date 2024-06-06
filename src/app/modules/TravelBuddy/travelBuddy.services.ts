@@ -37,13 +37,17 @@ const getAllBuddyRequestFromDb = async () => {
   const result = await prisma.travelBuddyRequest.findMany({
     select: {
       userId: true,
-      userEmail: true,
-      tripDestination: true,
       tripId: true,
       status: true,
       user: {
         select: {
           name: true,
+          email: true,
+        },
+      },
+      trip: {
+        select: {
+          destination: true,
         },
       },
     },
@@ -82,8 +86,12 @@ const getSingleUserBuddyRequestFromDb = async (token: string) => {
       userId: decoded?.id,
     },
     select: {
-      tripDestination: true,
       status: true,
+      trip: {
+        select: {
+          destination: true,
+        },
+      },
     },
   });
 
