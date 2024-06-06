@@ -128,6 +128,28 @@ const getUsers = catchAsync(async (req, res) => {
   });
 });
 
+const checkUserStatus = catchAsync(async (req, res) => {
+  const result = await UserServices.checkUserStatusFromDb(req.body);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User status fetched successfully",
+    data: result,
+  });
+});
+
+const checkEmailUsername = catchAsync(async (req, res) => {
+  const result = await UserServices.checkEmailUsernameFromDb(req.body);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "Email and username checked successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   register,
   login,
@@ -139,4 +161,6 @@ export const UserController = {
   changeUserRole,
   changeUserStatus,
   getUsers,
+  checkUserStatus,
+  checkEmailUsername,
 };

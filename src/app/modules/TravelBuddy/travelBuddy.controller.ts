@@ -27,6 +27,17 @@ const getTravelBuddies = catchAsync(async (req, res) => {
   });
 });
 
+const getAllBuddyRequest = catchAsync(async (req, res) => {
+  const result = await TravelBuddyServices.getAllBuddyRequestFromDb();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "All buddy request retrieved successfully",
+    data: result,
+  });
+});
+
 const updateTravelBuddyRequest = catchAsync(async (req, res) => {
   const { buddyId } = req.params;
   const result = await TravelBuddyServices.updateTravelBuddyRequestIntoDb(
@@ -78,4 +89,5 @@ export const TravelBuddyController = {
   updateTravelBuddyRequest,
   getSingleUserBuddyRequest,
   checkBuddyRequest,
+  getAllBuddyRequest,
 };

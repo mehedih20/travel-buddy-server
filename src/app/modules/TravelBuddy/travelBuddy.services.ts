@@ -33,6 +33,24 @@ const getTravelBuddiesFromDb = async (tripId: string) => {
   return result;
 };
 
+const getAllBuddyRequestFromDb = async () => {
+  const result = await prisma.travelBuddyRequest.findMany({
+    select: {
+      userId: true,
+      userEmail: true,
+      tripDestination: true,
+      tripId: true,
+      status: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+
 // Responding to the travel buddy request
 const updateTravelBuddyRequestIntoDb = async (
   buddyId: string,
@@ -98,4 +116,5 @@ export const TravelBuddyServices = {
   updateTravelBuddyRequestIntoDb,
   getSingleUserBuddyRequestFromDb,
   checkBuddyRequestInDb,
+  getAllBuddyRequestFromDb,
 };

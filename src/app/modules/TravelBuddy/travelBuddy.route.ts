@@ -18,8 +18,14 @@ router.post(
 
 router.get(
   "/travel-buddies/:tripId",
-  auth("user", "admin"),
+  auth("admin"),
   TravelBuddyController.getTravelBuddies,
+);
+
+router.get(
+  "/buddy-request",
+  auth("admin"),
+  TravelBuddyController.getAllBuddyRequest,
 );
 
 router.put(

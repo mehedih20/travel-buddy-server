@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import config from "../../config";
 import prisma from "../../utils/prisma";
 import verifyToken from "../../utils/verifyToken";
 import {
+  TCheckEmailUsername,
   TCheckUserPassword,
+  TCheckUserStatus,
   TUserLogin,
   TUserPasswordChange,
   TUserPhotoUpdate,
@@ -387,6 +390,62 @@ const getUsersFromDb = async (token: string) => {
   return result;
 };
 
+const checkUserStatusFromDb = async (payload: TCheckUserStatus) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: payload.userEmail,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user?.status;
+};
+
+const checkEmailUsernameFromDb = async (payload: TCheckEmailUsername) => {
+  let isEmailExists: any = false;
+  let isUsernameExists: any = false;
+
+  if (payload.email) {
+    isEmailExists = await prisma.user.findUnique({
+      where: {
+        email: payload?.email,
+      },
+    });
+  }
+  if (payload.username) {
+    isUsernameExists = await prisma.user.findUnique({
+      where: {
+        username: payload?.username,
+      },
+    });
+  }
+
+  if (isEmailExists && isUsernameExists) {
+    return {
+      email: true,
+      username: true,
+    };
+  } else if (isEmailExists && !isUsernameExists) {
+    return {
+      email: true,
+      username: false,
+    };
+  } else if (!isEmailExists && isUsernameExists) {
+    return {
+      email: false,
+      username: true,
+    };
+  } else {
+    return {
+      email: false,
+      username: false,
+    };
+  }
+};
+
 export const UserServices = {
   resgisterIntoDb,
   userLoginIntoDb,
@@ -398,4 +457,6 @@ export const UserServices = {
   changeUserRoleInDB,
   changeUserStatusInDB,
   getUsersFromDb,
+  checkUserStatusFromDb,
+  checkEmailUsernameFromDb,
 };

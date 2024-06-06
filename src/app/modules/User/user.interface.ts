@@ -38,3 +38,12 @@ export type TUserPasswordChange = {
 export type TCheckUserPassword = {
   password: string;
 };
+
+export type TCheckUserStatus = {
+  userEmail: string;
+};
+
+export type TCheckEmailUsername = {
+  email?: string;
+  username?: string;
+};
