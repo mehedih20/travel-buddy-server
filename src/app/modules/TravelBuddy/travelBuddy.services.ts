@@ -33,6 +33,7 @@ const getTravelBuddiesFromDb = async (tripId: string) => {
   return result;
 };
 
+// Fetches all travel buddy request for all trips
 const getAllBuddyRequestFromDb = async () => {
   const result = await prisma.travelBuddyRequest.findMany({
     select: {

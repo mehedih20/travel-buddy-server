@@ -1,21 +1,33 @@
-# Travel Buddy Matching
+# Travel Buddy Server-side
 
 - A project related to travel management where users can register and request for tours.
 
+### Client side
+
+- [Github link](https://github.com/mehedih20/travel-buddy-client)
+- [Live link](https://my-travel-buddy-ten.vercel.app)
+
 ### server side
 
-[Live link](https://travel-buddies-seven.vercel.app)
+- [Live link](https://travel-buddies-seven.vercel.app)
 
 ### Features
 
 - User registration
 - Token based user login
 - User profile updation
-- Trip creation
+- User credentials checking
+- Trip creation, modification and deletion
 - Trips fetching with filtering and pagination
-- Request for trips
-- View all request for a specific trip
+- View trips posted by respective user
+- Request for becoming a buddy in trips
+- View all buddy request for a specific trip
+- View all requests made by a specific user
 - Responding user request for trips
+- Destination creation and deletion
+- Proper validation on required services
+- Authorization for important and protected services
+- Proper error handling through out the project
 
 ### Technologies
 
@@ -37,11 +49,15 @@
 
 5. Now when the dependencies are installed, create a .env file and inside the file declare the following environment variables:
 
-   - DATABASE_URL: PostgreSQL database url. Url can be from local machine or cloud. Eg. "postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
-   - NODE_ENV: Eg. development
-   - PORT: Host port. Eg. 5000
+   - DATABASE_URL : PostgreSQL database url. Url can be from local machine or cloud. Eg. "postgresql ://johndoe:randompassword@localhost:5432/mydb?schema=public"
+   - NODE_ENV : Eg. development
+   - PORT : Host port. Eg. 5000
    - BCRYPT_SALT_ROUNDS : Salt rounds needed for bcrypt password hashing and verifying
    - JWT_ACCESS_SECRET : The secret string needed for creating jwt access token
+   - SUPER_ADMIN_NAME : Super admin name
+   - SUPER_ADMIN_EMAIL : Super admin email
+   - SUPER_ADMIN_USERNAME : Super admin username
+   - SUPER_ADMIN_PASSWORD : Super admin password
 
 6. Build the typescript code
 

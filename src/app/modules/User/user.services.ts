@@ -289,6 +289,7 @@ const checkUserPasswordInDb = async (
   }
 };
 
+// Change user role
 const changeUserRoleInDB = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -327,6 +328,7 @@ const changeUserRoleInDB = async (userId: string) => {
   return result;
 };
 
+// Change user status
 const changeUserStatusInDB = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -365,6 +367,7 @@ const changeUserStatusInDB = async (userId: string) => {
   return result;
 };
 
+// Fetching all users
 const getUsersFromDb = async (token: string) => {
   const decoded = verifyToken(token);
 
@@ -390,6 +393,7 @@ const getUsersFromDb = async (token: string) => {
   return result;
 };
 
+// User status check
 const checkUserStatusFromDb = async (payload: TCheckUserStatus) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -404,6 +408,7 @@ const checkUserStatusFromDb = async (payload: TCheckUserStatus) => {
   return user?.status;
 };
 
+// Checker for user needed while profile updation
 const checkProfileUpdateCredentialsFromDb = async (
   token: string,
   payload: TCheckEmailUsername,
@@ -456,6 +461,7 @@ const checkProfileUpdateCredentialsFromDb = async (
   }
 };
 
+// Checker for user needed while registering
 const checkRegistrationCredentialsFromDb = async (
   payload: TCheckEmailUsername,
 ) => {
