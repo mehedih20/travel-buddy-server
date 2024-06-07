@@ -22,8 +22,16 @@ const seedSuperAdmin = async () => {
     },
   });
   if (!checkSuperAdminExists) {
-    await prisma.user.create({
-      data: superUser,
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: superUser,
+      });
+
+      await tx.userProfile.create({
+        data: {
+          userId: user.id,
+        },
+      });
     });
   }
 };
