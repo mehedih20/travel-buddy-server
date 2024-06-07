@@ -18,7 +18,7 @@ router.post(
 
 router.get(
   "/travel-buddies/:tripId",
-  auth("admin"),
+  auth("user", "admin"),
   TravelBuddyController.getTravelBuddies,
 );
 
