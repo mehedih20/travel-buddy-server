@@ -1,6 +1,6 @@
-# Travel Buddy Server-side
+## Travel Buddy Server-side
 
-- A project related to travel management where users can register and request for tours.
+- A project that is made with such a vision that people can post unique travel plans and get enthusiastic buddies who would like to be part of it. One can request to several travel plans and with proper validation from the administration side, the request is verified.
 
 ### Client side
 
